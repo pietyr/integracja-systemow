@@ -31,6 +31,17 @@ public class User
         this.sex = sex;
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", login='" + login + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", sex=" + sex +
+                '}';
+    }
+
     public Long getId() {
         return id;
     }
