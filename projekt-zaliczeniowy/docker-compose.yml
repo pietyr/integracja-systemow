@@ -1,0 +1,74 @@
+x-app-environment: &app-environment
+  APP_DEBUG: 'true'
+  APP_URL: http://localhost:8000
+  DB_CONNECTION: mysql
+  DB_HOST: mysql
+  DB_PORT: 3306
+  DB_DATABASE: integracja
+  DB_USERNAME: integracja
+  DB_PASSWORD: integracja
+  QUEUE_CONNECTION: database
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - '8000:8000'
+    volumes:
+      - .:/var/www/html
+    env_file:
+      - .env
+    environment:
+      <<: *app-environment
+    depends_on:
+      mysql:
+        condition: service_healthy
+    command: ['sh', '/var/www/html/docker/entrypoint.sh']
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    volumes:
+      - .:/var/www/html
+    env_file:
+      - .env
+    environment:
+      <<: *app-environment
+    depends_on:
+      mysql:
+        condition: service_healthy
+    command:
+      [
+        'php',
+        'artisan',
+        'queue:work',
+        '--sleep=3',
+        '--tries=3',
+        '--timeout=300',
+      ]
+
+  mysql:
+    image: mysql:8.4
+    restart: unless-stopped
+    ports:
+      - '3308:3306'
+    environment:
+      MYSQL_DATABASE: integracja
+      MYSQL_USER: integracja
+      MYSQL_PASSWORD: integracja
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  mysql_data:

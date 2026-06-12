@@ -1,8 +1,13 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
-import { BookOpen, FolderGit2, LayoutGrid } from '@lucide/vue';
+import {
+    Download,
+    GitCompare,
+    LayoutGrid,
+    LineChart,
+    Newspaper,
+} from '@lucide/vue';
 import AppLogo from '@/components/AppLogo.vue';
-import NavFooter from '@/components/NavFooter.vue';
 import NavMain from '@/components/NavMain.vue';
 import NavUser from '@/components/NavUser.vue';
 import {
@@ -15,26 +20,37 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
+import comparisonRoute from '@/routes/comparison';
+import exportRoutes from '@/routes/export';
+import indicatorsRoute from '@/routes/indicators';
+import newsRoute from '@/routes/news';
 import type { NavItem } from '@/types';
 
 const mainNavItems: NavItem[] = [
     {
-        title: 'Dashboard',
+        title: 'Panel',
         href: dashboard(),
         icon: LayoutGrid,
     },
-];
-
-const footerNavItems: NavItem[] = [
     {
-        title: 'Repository',
-        href: 'https://github.com/laravel/vue-starter-kit',
-        icon: FolderGit2,
+        title: 'Porównanie',
+        href: comparisonRoute.index(),
+        icon: GitCompare,
     },
     {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#vue',
-        icon: BookOpen,
+        title: 'Wskaźniki',
+        href: indicatorsRoute.index(),
+        icon: LineChart,
+    },
+    {
+        title: 'Aktualności',
+        href: newsRoute.index(),
+        icon: Newspaper,
+    },
+    {
+        title: 'Eksport',
+        href: exportRoutes.index(),
+        icon: Download,
     },
 ];
 </script>
@@ -58,7 +74,6 @@ const footerNavItems: NavItem[] = [
         </SidebarContent>
 
         <SidebarFooter>
-            <NavFooter :items="footerNavItems" />
             <NavUser />
         </SidebarFooter>
     </Sidebar>
