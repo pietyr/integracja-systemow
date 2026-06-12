@@ -29,7 +29,7 @@ docker compose exec app php artisan integrations:sync --source=gus
 docker compose exec app php artisan integrations:sync --source=nytimes
 ```
 
-### Na co dzień
+### Przydatne polecenia dockera
 
 ```bash
 docker compose up -d
